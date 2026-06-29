@@ -42,12 +42,27 @@ GROUP BY product_category;
 
 -- COMMAND ----------
 
+---Determining average revenue
+
+SELECT AVG(ROUND((CAST(REPLACE(unit_price, ',','.') AS DOUBLE) *transaction_qty),2)) AS average_revenue
+FROM bright_coffee_shop_sales;
+
+-- COMMAND ----------
+
 ---Which store location had the highest revenue
 
 SELECT store_location,
         ROUND(SUM(CAST(REPLACE(unit_price, ',','.') AS DOUBLE) *transaction_qty),2) AS total_revenue_per_store
 FROM bright_coffee_shop_sales
 GROUP BY store_location;
+
+-- COMMAND ----------
+
+---Which store location had the highest revenue
+
+SELECT
+        ROUND(SUM(CAST(REPLACE(unit_price, ',','.') AS DOUBLE) *transaction_qty),2) AS total_revenue
+FROM bright_coffee_shop_sales;
 
 -- COMMAND ----------
 
@@ -79,12 +94,48 @@ FROM bright_coffee_shop_sales;
 
 -- COMMAND ----------
 
+---Determining the day of month for each transaction
+
+SELECT Transaction_date,
+       DAYOFMONTH (transaction_date) AS day_of_month
+FROM bright_coffee_shop_sales;
+
+-- COMMAND ----------
+
+---Categorizing days into 3 periods of the month based on the day of month
+
+SELECT transaction_date,
+    CASE
+        WHEN DAYOFMONTH(transaction_date) BETWEEN 1 AND 10 THEN 'Early Month'
+        WHEN DAYOFMONTH(transaction_date) BETWEEN 11 AND 20 THEN 'Mid Month'
+    ELSE 'Month End'
+    END AS month_period
+FROM bright_coffee_shop_sales;
+
+-- COMMAND ----------
+
+---Categorizing dates into weekdays and weekends
+
 SELECT DAYOFWEEK(transaction_date),
         CASE 
             WHEN DAYNAME (transaction_date) IN ('Sat','Sun') THEN 'Weekend'
             ELSE 'Weekday'
         END AS day_type
 FROM  bright_coffee_shop_sales;
+
+-- COMMAND ----------
+
+---Categorizing by the type of spend each transaction is
+
+SELECT ROUND((CAST(REPLACE(unit_price, ',','.') AS DOUBLE) *transaction_qty),2) AS revenue_per_row,
+    CASE 
+        WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) <=50 THEN 'Cheap Spend'
+        WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) BETWEEN 51 AND 200 THEN 'Low Spend'
+        WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) BETWEEN 201 AND 300 THEN 'Medium Spend'
+    ELSE 'Expensive Spend'
+    END AS spend_bucket
+
+FROM bright_coffee_shop_sales;
 
 -- COMMAND ----------
 
@@ -117,8 +168,8 @@ SELECT transaction_id,
         END AS time_bucket,
 
         CASE
-            WHEN DAYOFMONTH(transaction_time) BETWEEN 1 AND 10 THEN 'Early Month'
-            WHEN DAYOFMONTH(transaction_time) BETWEEN 11 AND 20 THEN 'Mid Month'
+            WHEN DAYOFMONTH(transaction_date) BETWEEN 1 AND 10 THEN 'Early Month'
+            WHEN DAYOFMONTH(transaction_date) BETWEEN 11 AND 20 THEN 'Mid Month'
             ELSE 'Month End'
         END AS month_period,
 
@@ -128,8 +179,7 @@ SELECT transaction_id,
 
         CASE 
             WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) <=50 THEN 'Cheap Spend'
-            WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) BETWEEN 51 AND 200 THEN 'Low Spend'
-            WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) BETWEEN 201 AND 300 THEN 'Medium Spend'
+            WHEN (transaction_qty * CAST(REPLACE(unit_price, ',','.') AS DOUBLE)) BETWEEN 50 AND 100 THEN 'Medium Spend'
             ELSE 'Expensive Spend'
         END AS spend_bucket
 
