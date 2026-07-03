@@ -70,7 +70,7 @@ The objective was to answer four core business questions:
 
 | Stage | Tool |
 |---|---|
-| Data flow/architecture diagram & Gantt chart | Miro |
+| Data flow/architecture diagram & Gantt chart | Miro/ Microsoft Excel |
 | Data cleaning & transformation | Databricks |
 | Feature engineering | Databricks |
 | Analysis (pivot tables & charts) | Microsoft Excel |
