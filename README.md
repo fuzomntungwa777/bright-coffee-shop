@@ -33,7 +33,7 @@ The objective was to answer four core business questions:
 5. **Presentation** — Packaged the findings, visuals, and recommendations into a
    PowerPoint presentation for the CEO.
 
-Key Insights
+## Key Insights
 
 - **Total revenue:** $698,812.33 from **214,470 units sold**, at an average revenue
   of $4.68 per transaction line. **Barista Espresso** was the single best-selling
@@ -70,10 +70,11 @@ Key Insights
 
 | Stage | Tool |
 |---|---|
+| Data flow/architecture diagram & Gantt chart | Miro |
 | Data cleaning & transformation | Databricks |
 | Feature engineering | Databricks |
 | Analysis (pivot tables & charts) | Microsoft Excel |
 | Final presentation | Microsoft PowerPoint |
-| Data flow/architecture diagram & Gantt chart | Miro |
+
 
 
